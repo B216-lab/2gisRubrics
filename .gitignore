@@ -1,0 +1,46 @@
+# Игнорировать все JSON-файлы
+*.json
+*.pyc
+# Игнорировать все TXT файлы, кроме requirements(список библиотек)
+*.txt
+!requirements.txt
+
+*.xlsx
+*.html
+
+# Игнорировать все логи
+*.log
+
+# Игнорировать все csv
+*.csv
+
+# Игнорировать переменную окружения
+.env
+
+# Игнорировать содержимое папок:
+__pychache__/
+dist/
+build/
+venv/
+.venv/
+
+parser_2gis/
+
+data/
+data/temp
+!data/.gitkeep
+!data/temp/.gitkeep
+
+*.py[cod]
+*.so
+*.pyc
+*.pyo
+*.swp
+*.swo
+*.lock
+*.egg-info/
+.env.local
+*.sqlite3
+*.db
+*.toml
+*.db-journal
