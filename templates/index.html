@@ -1,0 +1,694 @@
+<!-- templates_index_V4_ПОЛНЫЙ_С_ОБУЧЕНИЕМ.html -->
+<!-- Полный HTML V4 с поддержкой РУБРИК, КОМПАНИЙ и ОБУЧЕНИЯ -->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификатор рубрик и компаний</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            overflow-x: auto;
+        }
+        
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 3px solid transparent;
+            color: #666;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="file"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .progress-container {
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #c3e6cb;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Классификатор рубрик и компаний</h1>
+            <p>Система автоматической классификации на основе AI</p>
+        </div>
+        
+        <!-- ТАБЫ -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'rubrics')">🏷️ Рубрики</button>
+            <button class="tab-btn" onclick="switchTab(event, 'companies')">🏢 Компании</button>
+            <button class="tab-btn" onclick="switchTab(event, 'corrections')">✏️ Корректировка</button>
+            <button class="tab-btn" onclick="switchTab(event, 'reports')">📊 Отчеты</button>
+            <button class="tab-btn" onclick="switchTab(event, 'rules')">⚙️ Правила</button>
+            <button class="tab-btn" onclick="switchTab(event, 'training')">🎓 Обучение</button>
+            <button class="tab-btn" onclick="switchTab(event, 'stats')">📈 Статистика</button>
+        </div>
+        
+        <!-- ==================== ВКЛ.1: РУБРИКИ ==================== -->
+        <div id="rubrics" class="tab-content active">
+            <div class="card">
+                <h2>🏷️ Классификация рубрик</h2>
+                <div class="form-group">
+                    <label>Введите одну рубрику:</label>
+                    <textarea id="singleRubric" placeholder="Например: Продажа компьютерной техники..."></textarea>
+                </div>
+                <button class="btn" onclick="classifyRubricSingle()">🔍 Классифицировать</button>
+                <div id="singleRubricResult"></div>
+            </div>
+            
+            <div class="card">
+                <h2>📥 Загрузить файл с рубриками</h2>
+                <div class="form-group">
+                    <label>Выберите файл (CSV, XLSX, TXT):</label>
+                    <input type="file" id="rubricFile" accept=".csv,.xlsx,.txt">
+                </div>
+                <button class="btn" onclick="classifyRubricBatch()">🚀 Классифицировать пакет</button>
+                <button class="btn btn-secondary" onclick="exportClassifications()">📥 Экспортировать CSV</button>
+                
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill">0%</div>
+                    </div>
+                    <p id="progressText">Идет обработка...</p>
+                </div>
+                
+                <div id="rubricBatchResult"></div>
+            </div>
+        </div>
+        
+        <!-- ==================== ВКЛ.2: КОМПАНИИ ==================== -->
+        <div id="companies" class="tab-content">
+            <div class="card">
+                <h2>🏢 Классификация одной компании</h2>
+                <div class="form-group">
+                    <label>Название компании:</label>
+                    <input type="text" id="companyName" placeholder="Например: ООО Рога и Копыта">
+                </div>
+                <div class="form-group">
+                    <label>Описание:</label>
+                    <textarea id="companyDescription" placeholder="Описание деятельности..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Рубрики:</label>
+                    <textarea id="companyRubrics" placeholder="Рубрики компании..."></textarea>
+                </div>
+                <button class="btn" onclick="classifyCompanySingle()">🔍 Классифицировать</button>
+                <div id="singleCompanyResult"></div>
+            </div>
+            
+            <div class="card">
+                <h2>📥 Загрузить файл с компаниями</h2>
+                <div class="form-group">
+                    <label>Выберите файл CSV (name, description, rubrics):</label>
+                    <input type="file" id="companyFile" accept=".csv">
+                </div>
+                <button class="btn" onclick="classifyCompanyBatch()">🚀 Классифицировать пакет</button>
+                <button class="btn btn-secondary" onclick="exportClassifications()">📥 Экспортировать CSV</button>
+                
+                <div class="progress-container" id="companyProgressContainer">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="companyProgressFill">0%</div>
+                    </div>
+                    <p id="companyProgressText">Идет обработка...</p>
+                </div>
+                
+                <div id="companyBatchResult"></div>
+            </div>
+        </div>
+        
+        <!-- ==================== ВКЛ.3: КОРРЕКТИРОВКА ==================== -->
+        <div id="corrections" class="tab-content">
+            <div class="card">
+                <h2>✏️ Корректировка результатов</h2>
+                <button class="btn" onclick="loadCorrections()">📋 Загрузить данные</button>
+                <div id="correctionsResult" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <!-- ==================== ВКЛ.4: ОТЧЕТЫ ==================== -->
+        <div id="reports" class="tab-content">
+            <div class="card">
+                <h2>📊 Генерация отчетов</h2>
+                <div class="form-group">
+                    <label>Тип отчета:</label>
+                    <select id="reportType">
+                        <option value="full">Полный отчет</option>
+                        <option value="by_category">По категориям</option>
+                        <option value="accuracy">Качество классификации</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="generateReport()">🔄 Сгенерировать</button>
+                <div id="reportResult" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <!-- ==================== ВКЛ.5: ПРАВИЛА ==================== -->
+        <div id="rules" class="tab-content">
+            <div class="card">
+                <h2>⚙️ Добавить правило классификации</h2>
+                <div class="form-group">
+                    <label>Ключевое слово:</label>
+                    <input type="text" id="ruleKeyword" placeholder="Например: IT">
+                </div>
+                <div class="form-group">
+                    <label>Категория:</label>
+                    <input type="text" id="ruleCategory" placeholder="Категория">
+                </div>
+                <button class="btn" onclick="addRule()">➕ Добавить правило</button>
+                <div id="rulesResult"></div>
+            </div>
+        </div>
+        
+        <!-- ==================== ВКЛ.6: ОБУЧЕНИЕ ==================== -->
+        <div id="training" class="tab-content">
+            <div class="card">
+                <h2>🎓 Обучение модели</h2>
+                <p>Переобучение модели на новых данных для улучшения точности классификации</p>
+                
+                <div style="margin: 20px 0;">
+                    <button class="btn" onclick="startTraining()">🚀 Начать обучение</button>
+                    <button class="btn btn-secondary" onclick="checkTrainingStatus()">📊 Проверить статус</button>
+                </div>
+                
+                <div class="progress-container" id="trainingProgressContainer" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="trainingProgressFill">0%</div>
+                    </div>
+                    <p id="trainingProgressText">Инициализация...</p>
+                    <p id="trainingMessage"></p>
+                </div>
+                
+                <div id="trainingResult"></div>
+            </div>
+        </div>
+        
+        <!-- ==================== ВКЛ.7: СТАТИСТИКА ==================== -->
+        <div id="stats" class="tab-content">
+            <div class="card">
+                <h2>📈 Статистика</h2>
+                <button class="btn" onclick="loadStatistics()">🔄 Обновить</button>
+                <div id="statsResult" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== ПЕРЕКЛЮЧЕНИЕ ТАБОВ ====================
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tabName === 'corrections') loadCorrections();
+            if (tabName === 'stats') loadStatistics();
+            if (tabName === 'training') checkTrainingStatus();
+        }
+        
+        // ==================== КЛАССИФИКАЦИЯ РУБРИК ====================
+        async function classifyRubricSingle() {
+            const text = document.getElementById('singleRubric').value;
+            if (!text) { alert('Введите рубрику'); return; }
+            
+            try {
+                const response = await fetch('/api/classify_rubric_single', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Ошибка сервера');
+                
+                let html = '<div class="result">';
+                html += `<strong>Категория:</strong> ${data.category}<br>`;
+                html += `<strong>Уверенность:</strong> ${data.confidence}<br>`;
+                html += '<strong>Топ-3:</strong><ul>';
+                data.top_3.forEach(item => {
+                    html += `<li>${item.category}: ${item.confidence}</li>`;
+                });
+                html += '</ul></div>';
+                document.getElementById('singleRubricResult').innerHTML = html;
+            } catch (e) {
+                document.getElementById('singleRubricResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+        
+        async function classifyRubricBatch() {
+            const fileInput = document.getElementById('rubricFile');
+            if (!fileInput.files.length) { alert('Выберите файл'); return; }
+            
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            
+            document.getElementById('progressContainer').style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/classify_rubric_batch', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Ошибка сервера');
+                
+                const progress = Math.round((data.processed / data.total) * 100);
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('progressFill').textContent = progress + '%';
+                document.getElementById('progressText').textContent = `Обработано: ${data.processed}/${data.total}`;
+                
+                let html = `<div class="success">✅ Обработано ${data.processed}/${data.total}</div>`;
+                html += '<table><tr><th>Текст</th><th>Категория</th><th>Уверенность</th></tr>';
+                data.results.forEach(r => {
+                    html += `<tr><td>${r.text}</td><td>${r.category}</td><td>${r.confidence}</td></tr>`;
+                });
+                html += '</table>';
+                document.getElementById('rubricBatchResult').innerHTML = html;
+            } catch (e) {
+                document.getElementById('rubricBatchResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+        
+        // ==================== КЛАССИФИКАЦИЯ КОМПАНИЙ ====================
+        async function classifyCompanySingle() {
+            const company_name = document.getElementById('companyName').value;
+            if (!company_name) { alert('Введите название'); return; }
+            
+            try {
+                const response = await fetch('/api/classify_company_single', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        company_name,
+                        description: document.getElementById('companyDescription').value,
+                        rubrics: document.getElementById('companyRubrics').value
+                    })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Ошибка сервера');
+                
+                let html = '<div class="result">';
+                html += `<strong>Компания:</strong> ${data.company_name}<br>`;
+                html += `<strong>Категория:</strong> ${data.category}<br>`;
+                html += `<strong>Уверенность:</strong> ${data.confidence}<br>`;
+                html += '<strong>Топ-3:</strong><ul>';
+                data.top_3.forEach(item => {
+                    html += `<li>${item.category}: ${item.confidence}</li>`;
+                });
+                html += '</ul></div>';
+                document.getElementById('singleCompanyResult').innerHTML = html;
+            } catch (e) {
+                document.getElementById('singleCompanyResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+        
+        async function classifyCompanyBatch() {
+            const fileInput = document.getElementById('companyFile');
+            if (!fileInput.files.length) { alert('Выберите файл'); return; }
+            
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            
+            document.getElementById('companyProgressContainer').style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/classify_company_batch', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Ошибка сервера');
+                
+                const progress = Math.round((data.processed / data.total) * 100);
+                document.getElementById('companyProgressFill').style.width = progress + '%';
+                document.getElementById('companyProgressFill').textContent = progress + '%';
+                document.getElementById('companyProgressText').textContent = `Обработано: ${data.processed}/${data.total}`;
+                
+                let html = `<div class="success">✅ Обработано ${data.processed}/${data.total}</div>`;
+                html += '<table><tr><th>Компания</th><th>Категория</th><th>Уверенность</th></tr>';
+                data.results.forEach(r => {
+                    html += `<tr><td>${r.company_name}</td><td>${r.category}</td><td>${r.confidence}</td></tr>`;
+                });
+                html += '</table>';
+                document.getElementById('companyBatchResult').innerHTML = html;
+            } catch (e) {
+                document.getElementById('companyBatchResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+        
+        // ==================== ОСТАЛЬНЫЕ ФУНКЦИИ ====================
+        async function exportClassifications() {
+            try {
+                const response = await fetch('/api/export_classifications');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `classifications_${new Date().toISOString().slice(0,10)}.csv`;
+                a.click();
+            } catch (e) {
+                alert('❌ Ошибка экспорта: ' + e.message);
+            }
+        }
+        
+        async function loadCorrections() {
+            try {
+                const response = await fetch('/api/get_corrections');
+                const data = await response.json();
+                
+                let html = `<div class="success">${data.total} элементов</div>`;
+                if (data.corrections.length === 0) {
+                    html += '<p>Нет элементов для корректировки</p>';
+                }
+                document.getElementById('correctionsResult').innerHTML = html;
+            } catch (e) {
+                document.getElementById('correctionsResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+        
+        async function generateReport() {
+            const reportType = document.getElementById('reportType').value;
+            
+            try {
+                const response = await fetch('/api/generate_report', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ report_type: reportType })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Ошибка сервера');
+                
+                let html = '<div class="success">✅ Отчет готов</div>';
+                html += '<pre style="background: #f8f9fa; padding: 15px; border-radius: 5px;">' + data.content + '</pre>';
+                document.getElementById('reportResult').innerHTML = html;
+            } catch (e) {
+                document.getElementById('reportResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+        
+        async function addRule() {
+            const keyword = document.getElementById('ruleKeyword').value;
+            const category = document.getElementById('ruleCategory').value;
+            
+            if (!keyword || !category) { alert('Заполните поля'); return; }
+            
+            try {
+                const response = await fetch('/api/add_rule', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ keyword, category, priority: 50 })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Ошибка сервера');
+                
+                document.getElementById('rulesResult').innerHTML = `<div class="success">✅ ${data.message}</div>`;
+            } catch (e) {
+                document.getElementById('rulesResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+        
+        // ==================== ОБУЧЕНИЕ ====================
+        async function startTraining() {
+            document.getElementById('trainingProgressContainer').style.display = 'block';
+            document.getElementById('trainingResult').innerHTML = '';
+            
+            try {
+                const response = await fetch('/api/training/train', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Ошибка сервера');
+                
+                // Начинаем опрашивать статус
+                let progress = 0;
+                const statusInterval = setInterval(async () => {
+                    try {
+                        const statusResponse = await fetch('/api/training/status');
+                        const status = await statusResponse.json();
+                        
+                        document.getElementById('trainingProgressFill').style.width = status.progress + '%';
+                        document.getElementById('trainingProgressFill').textContent = status.progress + '%';
+                        document.getElementById('trainingProgressText').textContent = status.status;
+                        document.getElementById('trainingMessage').textContent = status.message;
+                        
+                        if (!status.is_training) {
+                            clearInterval(statusInterval);
+                            document.getElementById('trainingResult').innerHTML = 
+                                `<div class="success">✅ Обучение завершено!</div><p>${data.message}</p>`;
+                        }
+                    } catch (e) {
+                        console.error('Ошибка статуса:', e);
+                    }
+                }, 500);
+                
+            } catch (e) {
+                document.getElementById('trainingResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+        
+        async function checkTrainingStatus() {
+            try {
+                const response = await fetch('/api/training/status');
+                const status = await response.json();
+                
+                let html = '<div class="result">';
+                html += `<strong>Статус:</strong> ${status.status}<br>`;
+                html += `<strong>Прогресс:</strong> ${status.progress}%<br>`;
+                html += `<strong>Обучается:</strong> ${status.is_training ? 'Да' : 'Нет'}<br>`;
+                if (status.message) html += `<strong>Сообщение:</strong> ${status.message}`;
+                html += '</div>';
+                document.getElementById('trainingResult').innerHTML = html;
+            } catch (e) {
+                document.getElementById('trainingResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+        
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/statistics');
+                const stats = await response.json();
+                
+                let html = '';
+                html += `<div class="stat-card"><div class="stat-number">${stats.total}</div>Всего классифицировано</div>`;
+                html += `<div class="stat-card"><div class="stat-number">${(stats.avg_confidence * 100).toFixed(1)}%</div>Средняя уверенность</div>`;
+                html += `<div class="stat-card"><div class="stat-number">${stats.need_correction}</div>Требует корректировки</div>`;
+                
+                if (stats.by_category && stats.by_category.length > 0) {
+                    html += '<table><tr><th>Категория</th><th>Количество</th></tr>';
+                    stats.by_category.forEach(item => {
+                        html += `<tr><td>${item.predicted_category}</td><td>${item.count}</td></tr>`;
+                    });
+                    html += '</table>';
+                }
+                
+                document.getElementById('statsResult').innerHTML = html;
+            } catch (e) {
+                document.getElementById('statsResult').innerHTML = `<div class="error">❌ Ошибка: ${e.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

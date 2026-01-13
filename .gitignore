@@ -6,7 +6,6 @@
 !requirements.txt
 
 *.xlsx
-*.html
 
 # Игнорировать все логи
 *.log
@@ -16,6 +15,10 @@
 
 # Игнорировать переменную окружения
 .env
+models/
+uploads/
+output/
+Old/
 
 # Игнорировать содержимое папок:
 __pychache__/
@@ -23,7 +26,7 @@ dist/
 build/
 venv/
 .venv/
-
+MD/
 parser_2gis/
 
 data/
